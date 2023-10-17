@@ -11,7 +11,7 @@ import SwiftUI
 struct ContentView: View {
     let petIcons = ["🐶", "🐹", "🐔", "🐠", "🐩", "🐿️"].shuffled() + ["🐶", "🐹", "🐔", "🐠", "🐩", "🐿️"].shuffled()
 
-    let flowerIcons = ["🌺", "🌹", "🌻", "🌸","🪷", "🍁"].shuffled() + ["🌺", "🌹", "🌻", "🌸","🪷", "🍁"].shuffled()
+    let flowerIcons = ["🌺", "🌹", "🌻", "🌸", "🪷", "🍁"].shuffled() + ["🌺", "🌹", "🌻", "🌸", "🪷", "🍁"].shuffled()
 
     let weatherIcons = ["☀️", "⛅️", "☃️", "☔️", "🌪️", "❄️"].shuffled() + ["☀️", "⛅️", "☃️", "☔️", "🌪️", "❄️"].shuffled()
     @State var themeNumber = 1
