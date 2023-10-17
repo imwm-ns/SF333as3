@@ -2,121 +2,98 @@
 //  ContentView.swift
 //  Memorize
 //
-//  Created by 
+//  Created by
 //      Narathip Jaroensuk 6410742412
 //      Sittipak Srisawas 6410742032
-//      Wasawat Cheepsamut 6410742735
 
 import SwiftUI
 
 struct ContentView: View {
-    let pets = ["🐶", "🐹", "🐔", "🐠", "🐩", "🐿️"].shuffled() + ["🐶", "🐹", "🐔", "🐠", "🐩", "🐿️"].shuffled()
-    
-    let flowers = ["🌺", "🌹", "🌻", "🌸","🪷"].shuffled() + ["🌺", "🌹", "🌻", "🌸","🪷"].shuffled()
-    
-    let weather = ["☀️", "⛅️", "☃️", "☔️", "🌪️", "❄️"].shuffled() + ["☀️", "⛅️", "☃️", "☔️", "🌪️", "❄️"].shuffled()
-    
-    @State var cardCount = 12
-    
+    let petIcons = ["🐶", "🐹", "🐔", "🐠", "🐩", "🐿️", "🦌", "🐊"].shuffled() + ["🐶", "🐹", "🐔", "🐠", "🐩", "🐿️", "🦌", "🐊"].shuffled()
+
+    let flowerIcons = ["🌺", "🌹", "🌻", "🌸", "🪷", "🍁", "🌼", "🍀"].shuffled() + ["🌺", "🌹", "🌻", "🌸", "🪷", "🍁", "🌼", "🍀"].shuffled()
+
+    let weatherIcons = ["☀️", "⛅️", "☃️", "☔️", "🌪️", "❄️", "🌧️", "🌩️"].shuffled() + ["☀️", "⛅️", "☃️", "☔️", "🌪️", "❄️", "🌧️", "🌩️"].shuffled()
+    @State var themeNumber = 1
     var body: some View {
         VStack {
+            Text("Memorize!").foregroundStyle(Color.purple).font(.largeTitle).bold()
             ScrollView {
-                cards
+                if (themeNumber == 1) {
+                    showCard(by: petIcons, color: .brown)
+                }
+                else if (themeNumber == 2) {
+                    showCard(by: flowerIcons, color: .pink)
+                }
+                else {
+                    showCard(by: weatherIcons, color: .blue)
+                }
             }
-            Spacer()
-            cardCountAdjusters
+            showBottomBars
         }
         .padding()
     }
     
-    var cards: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 90))]) {
-            ForEach(0..<cardCount, id: \.self) { index in
-                CardView(content: pets[index])
-                    .aspectRatio(2/3, contentMode: .fit)
+    func showCard(by icon: [String], color: Color) -> some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
+            ForEach(0..<icon.count, id: \.self) { index in
+                    CardView(content: icon[index])
+                        .aspectRatio(2/3, contentMode: .fit)
             }
         }
-        .foregroundColor(.orange)
+        .foregroundColor(color)
     }
     
-    var cardCountAdjusters: some View {
+    func showBottomBar (by number: Int , symbol: String, title: String) -> some View {
+        VStack {
+            Button(action: {
+                themeNumber = number
+            }, label: {
+                Image(systemName: symbol)
+            })
+            Text(title)
+        }
+    }
+    
+    var showBottomBars: some View {
         HStack {
+            pets
             Spacer()
-            petsTheme
+            flowers
             Spacer()
-            flowersTheme
-            Spacer()
-            weatherTheme
-            Spacer()
+            weathers
         }
+        .padding([.horizontal, .vertical], 40)
         .imageScale(.large)
-        .font(.largeTitle)
+        .font(.headline)
     }
     
-    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
-        Button(action: {
-            cardCount += offset
-        }, label: {
-            Image(systemName: symbol)
-        })
-        .disabled(cardCount + offset < 1 || cardCount + offset > pets.count)
+    var pets: some View {
+        showBottomBar(by: 1 ,symbol: "pawprint.circle.fill", title: "Pets").foregroundColor(.brown)
     }
     
-    var cardRemover: some View {
-        cardCountAdjuster(by: -1, symbol: "rectangle.stack.badge.minus.fill")
+    var flowers: some View {
+        showBottomBar(by: 2 ,symbol: "suit.heart.fill", title: "Flowers").foregroundColor(.pink)
     }
     
-    var cardAdder: some View {
-        cardCountAdjuster(by: 1, symbol: "rectangle.stack.badge.plus.fill")
+    var weathers: some View {
+        showBottomBar(by: 3 ,symbol: "sun.horizon.circle.fill", title: "Weather").foregroundColor(.blue)
     }
-    
-    var petsTheme: some View {
-        VStack {
-            cardCountAdjuster(by: 1, symbol: "pawprint.fill")
-                .foregroundColor(.brown)
-                Text("PETS")
-                .font(.headline)
-            }
-    }
-    
-    var flowersTheme: some View {
-        VStack {
-                cardCountAdjuster(by: 1, symbol: "camera.macro")
-                .foregroundColor(.pink)
-                Text("FLOWERS")
-                    .font(.headline)
-            }
-    }
-    
-    var weatherTheme: some View {
-        VStack {
-                cardCountAdjuster(by: 1, symbol: "cloud.sun.fill")
-                .foregroundColor(.blue)
-                Text("WEATHER")
-                    .font(.headline)
-            }
-    }
-    
-    
-    
-    
 }
 
 struct CardView: View {
     let content: String
-    @State var isFaceUp = true
-    
+    @State var isFaceUp: Bool = false
     var body: some View {
-        ZStack {
+        ZStack(alignment: .center) {
             let base = RoundedRectangle(cornerRadius: 12)
             Group {
                 base.foregroundColor(.white)
-                base.strokeBorder(lineWidth: 2)
+                base.strokeBorder(lineWidth: 2.0)
                 Text(content).font(.largeTitle)
             }
             .opacity(isFaceUp ? 1 : 0)
             base.opacity(isFaceUp ? 0 : 1)
-            
         }
         .onTapGesture {
             isFaceUp.toggle()
