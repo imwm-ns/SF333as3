@@ -5,63 +5,79 @@
 //  Created by 
 //      Narathip Jaroensuk 6410742412
 //      Sittipak Srisawas 6410742032
-//      Wasawat Cheepsamut 6410742735
 
 import SwiftUI
 
 struct ContentView: View {
-    let emojis: [String] = ["🎃", "👻", "🕷️", "💀", "❄️", "🧙", "🙀", "👿", "😱", 
-        "☠️", "🍭", "🎲"] + ["🎃", "👻", "🕷️", "💀", "❄️", "🧙", "🙀", "👿", "😱",
-        "☠️", "🍭", "🎲"]
-    @State var cardCount = 4
+    let petIcons = ["🐶", "🐹", "🐔", "🐠", "🐩", "🐿️"].shuffled() + ["🐶", "🐹", "🐔", "🐠", "🐩", "🐿️"].shuffled()
+
+    let flowerIcons = ["🌺", "🌹", "🌻", "🌸","🪷", "🍁"].shuffled() + ["🌺", "🌹", "🌻", "🌸","🪷", "🍁"].shuffled()
+
+    let weatherIcons = ["☀️", "⛅️", "☃️", "☔️", "🌪️", "❄️"].shuffled() + ["☀️", "⛅️", "☃️", "☔️", "🌪️", "❄️"].shuffled()
+    @State var themeNumber = 1
     var body: some View {
         VStack {
+            Text("Memorize!").foregroundStyle(Color.purple).font(.largeTitle).bold()
             ScrollView {
-                cards
+                if (themeNumber == 1) {
+                    showCard(by: petIcons, color: .brown)
+                }
+                else if (themeNumber == 2) {
+                    showCard(by: flowerIcons, color: .pink)
+                }
+                else {
+                    showCard(by: weatherIcons, color: .blue)
+                }
             }
-            cardCountAdjusters
+            showBottomBars
         }
         .padding()
     }
     
-    var cards: some View {
+    func showCard(by icon: [String], color: Color) -> some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
-            // emojis.indices == 0..<emojis.count
-            ForEach(0..<cardCount, id: \.self) { index in
-                CardView(content: emojis[index])
-                    .aspectRatio(2/3, contentMode: .fit)
+            ForEach(0..<icon.count, id: \.self) { index in
+                    CardView(content: icon[index])
+                        .aspectRatio(2/3, contentMode: .fit)
             }
         }
-        .foregroundColor(.orange)
+        .foregroundColor(color)
     }
     
-    var cardCountAdjusters: some View {
-        HStack {
-            cardAdder
-            Spacer()
-            cardRemover
+    func showBottomBar (by number: Int , symbol: String, title: String) -> some View {
+        VStack {
+            Button(action: {
+                themeNumber = number
+            }, label: {
+                Image(systemName: symbol)
+            })
+            Text(title)
         }
+    }
+    
+    var showBottomBars: some View {
+        HStack {
+            pets
+            Spacer()
+            flowers
+            Spacer()
+            weathers
+        }
+        .padding([.horizontal, .vertical], 40)
         .imageScale(.large)
-        .font(.largeTitle)
+        .font(.headline)
     }
     
-    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
-        Button(action: {
-            cardCount += offset
-        }, label: {
-            Image(systemName: symbol)
-        })
-        .foregroundColor(.red)
-        .disabled(cardCount + offset < 1 || cardCount + offset > emojis.count)
-        
+    var pets: some View {
+        showBottomBar(by: 1 ,symbol: "pawprint.circle.fill", title: "Pets").foregroundColor(.brown)
     }
     
-    var cardAdder: some View {
-        cardCountAdjuster(by: 1, symbol: "rectangle.stack.badge.plus.fill")
+    var flowers: some View {
+        showBottomBar(by: 2 ,symbol: "suit.heart.fill", title: "Flowers").foregroundColor(.pink)
     }
     
-    var cardRemover: some View {
-        cardCountAdjuster(by: -1, symbol: "rectangle.stack.badge.minus.fill")
+    var weathers: some View {
+        showBottomBar(by: 3 ,symbol: "sun.horizon.circle.fill", title: "Weather").foregroundColor(.blue)
     }
 }
 
