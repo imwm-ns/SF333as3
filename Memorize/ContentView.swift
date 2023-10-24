@@ -84,7 +84,7 @@ struct ContentView: View {
 
 struct CardView: View {
     let content: String
-    @State var isFaceUp: Bool = true
+    @State var isFaceUp: Bool = false
     var body: some View {
         ZStack(alignment: .center) {
             let base = RoundedRectangle(cornerRadius: 12)
