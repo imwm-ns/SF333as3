@@ -35,9 +35,10 @@ struct ContentView: View {
     }
     
     func showCard(by icon: [String], color: Color) -> some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
-            ForEach(0..<icon.count, id: \.self) { index in
-                    CardView(content: icon[index])
+        let shuffledIcon = icon.shuffled()
+        return LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
+            ForEach(0..<shuffledIcon.count, id: \.self) { index in
+                    CardView(content: shuffledIcon[index])
                         .aspectRatio(2/3, contentMode: .fit)
             }
         }
