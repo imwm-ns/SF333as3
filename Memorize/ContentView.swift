@@ -35,9 +35,10 @@ struct ContentView: View {
     }
     
     func showCard(by icon: [String], color: Color) -> some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
-            ForEach(0..<icon.count, id: \.self) { index in
-                    CardView(content: icon[index])
+        let shuffledIcon = icon.shuffled()
+        return LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))]) {
+            ForEach(0..<shuffledIcon.count, id: \.self) { index in
+                    CardView(content: shuffledIcon[index])
                         .aspectRatio(2/3, contentMode: .fit)
             }
         }
@@ -83,7 +84,7 @@ struct ContentView: View {
 
 struct CardView: View {
     let content: String
-    @State var isFaceUp: Bool = false
+    @State var isFaceUp: Bool = true
     var body: some View {
         ZStack(alignment: .center) {
             let base = RoundedRectangle(cornerRadius: 12)
