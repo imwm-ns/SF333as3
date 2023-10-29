@@ -5,7 +5,7 @@
   Narathip Jaroensuk 6410742412 <br>&emsp;
   Sittipak Srisawas 6410742032
 
-**Description ** <br>&emsp;
+**Description** <br>&emsp;
   This is a Memorize Game. We created the game using Swift UI. I hope you will enjoy playing the game.
 
 **Game Demo** <br>
